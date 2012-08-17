@@ -1,0 +1,37 @@
+/**
+ * =====================================
+ * TestBailOut ( reason )
+ *
+ * PURPOSE:
+ *		Adds a "Bail out!" line to the current TAP log, indicating that a series of tests
+ *		could not continue past that point.
+ *
+ * RETURNS:
+ *		False
+ *
+ * PARAMETERS:
+ *		reason: An optional description of the reason for the bail out.
+ *
+ * DEPENDENCIES: none
+ *
+ * VARIABLES:
+ *		$~test.count
+ *		$~test.log[n]
+ *
+ * HISTORY:
+ *		CREATED on 2012-08-17 by Jeremy Bante <http://scr.im/jbante>.
+ *
+ * REFERENCES:
+ *		http://testanything.org/
+ * =====================================
+ */
+
+Let ( [
+	~bail =
+		"Bail out!"
+		& If ( not IsEmpty ( reason ) ; " " & reason );
+	~index = Max ( $~test.count ; 0 );
+	$~test.log[~index] = List ( $~test.log[~index] ; ~bail )
+];
+	False
+)

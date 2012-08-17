@@ -22,6 +22,8 @@
  *		$~test.plan
  *
  * HISTORY:
+ *		MODIFIED on 2012-08-17 by Jeremy Bante <http://scr.im/jbante> to handle results
+ *		from the TestBailOut function.
  *		CREATED on 2012-06-29 by Jeremy Bante <http://scr.im/jbante>.
  *
  * REFERENCES:
@@ -31,23 +33,25 @@
 
 Let ( [
 	~version = "TAP version 13";
-	$~test.i = $~test.i + 1
+	$~test.i = If ( IsEmpty ( $~test.i ) ; 0 ; /* Else */ $~test.i + 1 );
+	~testLine = $~test.log[$~test.i]
 ];
 	// only include TAP version, meta information, and test plan in first function call
-	If ( $~test.i = 1;
-		~version & ¶
+	If ( $~test.i = 0;
+		~version
 		& If ( not IsEmpty ( $~test.meta );
-			"	---"
+			"¶	---"
 			& Substitute ( ¶ & $~test.meta ; ¶ ; "¶	" )	// indent YAML
-			& "¶	...¶"
+			& "¶	..."
 		)
-		& If ( not IsEmpty ( $~test.plan ) ; $~test.plan & ¶ )
+		& If ( not IsEmpty ( $~test.plan ) ; ¶ & $~test.plan )
 	)
 
-	& $~test.log[$~test.i]
+	// Don't include empty opening "Bail out!" line if it doesn't exist
+	& If ( $~test.i > 0 or not IsEmpty ( ~testLine ) ; ¶ & ~testLine )
 
 	& If ( $~test.i < $~test.count;	// there are more tests to log
-		¶ & TestLog;
+		TestLog;
 	/* Else */
 		Let ( [
 			$~test.i = ""	// clear variable for future use
