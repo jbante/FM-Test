@@ -20,7 +20,7 @@ Custom functions are included as separate files in the Functions folder. The fun
 	Set Variable [$ignoreMe; Value:TestOK ( False ; "Test with skip directive doesn't count" )]
 	Exit Script [Result:TestLog]
 
-This test will exit with this result:
+This script will exit with this result:
 
 	TAP version 13
 	1..3
