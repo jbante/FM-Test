@@ -14,7 +14,7 @@ Custom functions are included as separate files in the Functions folder. The fun
 
 	Set Variable [$ignoreMe; Value:TestPlan ( 3 )	// plan to run 1 test]
 	Set Variable [$ignoreMe; Value:TestOK ( True ; "Test is tautologically OK" )]
-	Set Variable [#ignoreMe; Value:TestDiagnostic ( "This is a comment line" )]
+	Set Variable [$ignoreMe; Value:TestDiagnostic ( "This is a comment line" )]
 	Set Variable [$ignoreMe; Value:TestEqual ( 1 + 1 ; 3 ; "Arithmetic: 1 + 1 = 3" )]
 	Set Variable [$ignoreMe; Value:TestSkip ( 1 ; "Demonstrating TestSkip function" )]
 	Set Variable [$ignoreMe; Value:TestOK ( False ; "Test with skip directive doesn't count" )]
