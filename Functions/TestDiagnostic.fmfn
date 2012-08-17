@@ -1,0 +1,61 @@
+/**
+ * =====================================
+ * TestDiagnostic ( yaml )
+ *
+ * PURPOSE:
+ *		Adds a diagnostic note to the previous entry in the test log. If there are no
+ *		logged tests yet, adds a diagnostic to the test meta information. The log is
+ *		formatted according to the Test Anything Protocol (TAP); the diagnostic content
+ *		should be formatted according to TAP-compatible YAMLish.
+ *
+ * RETURNS:
+ *		False
+ *
+ * PARAMETERS:
+ *		yaml: The diagnostic information to add to the test log, formatted as YAMLish.
+ *
+ * DEPENDENCIES: none
+ *
+ * VARIABLES:
+ *		$~test.count
+ *		$~test.log[n]
+ *		$~test.meta
+ *
+ * EXAMPLE:
+ *		TestOK ( $a = $b ; "$a equals $b" )
+ *		// due to short-circuit logic, TestDiagnostic is only called if test fails
+ *		or TestDiagnostic ( "actual: " & $a & "¶expected " & $b )
+ *
+ * HISTORY:
+ *		CREATED on 2012-06-30 by Jeremy Bante <http://scr.im/jbante>.
+ *
+ * REFERENCES:
+ *		http://testanything.org/
+ *		http://testanything.org/wiki/index.php/YAMLish
+ * =====================================
+ */
+
+If ( $~test.count > 0;
+	Let ( [	// add YAML to $~test.log
+		~yamlStart = "¶	---";
+		~yamlEnd = "¶	...";
+		~yaml =	 Substitute ( "¶" & yaml ; ¶ ; "¶	" );	// indent
+		$~test.log[$~test.count] =
+			If ( Position ( $~test.log[$~test.count] ; ~yamlEnd ; 1 ; 1 );
+				// append
+				Substitute ( $~test.log[$~test.count] ; ~yamlEnd ; ~yaml & ~yamlEnd );
+			/* Else, new data */
+				$~test.log[$~test.count] & ~yamlStart & ~yaml & ~yamlEnd
+			)
+	];
+		False
+	);
+/* Else, add YAML to $~test.meta */
+	Let ( [
+		$~test.meta =
+			If ( not IsEmpty ( $~test.meta ) ; $~test.meta & ¶ )
+			& yaml
+	];
+		False
+	)
+)

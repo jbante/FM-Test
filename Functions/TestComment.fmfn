@@ -1,0 +1,41 @@
+/**
+ * =====================================
+ * TestComment ( comment )
+ *
+ * PURPOSE:
+ *		Adds a comment to the previous entry in the test log. The log is formatted
+ *		according to the Test Anything Protocol (TAP).
+ *
+ * RETURNS:
+ *		False
+ *
+ * PARAMETERS:
+ *		comment: The comment to add to the test log.
+ *
+ * DEPENDENCIES: none
+ *
+ * VARIABLES:
+ *		$~test.count
+ *		$~test.log[n]
+ *
+ * EXAMPLE:
+ *		TestOK ( $a = $b ; "$a equals $b" )
+ *		// due to short-circuit logic, TestComment is only called if test fails
+ *		or TestComment ( "The test is not OK." )
+ *
+ * HISTORY:
+ *		CREATED on 2012-06-28 by Jeremy Bante <http://scr.im/jbante>.
+ *
+ * REFERENCES:
+ *		http://testanything.org/
+ * =====================================
+ */
+
+Let ( [
+	$~test.log[$~test.count] =
+		$~test.log[$~test.count]
+		& "¶# "
+		& Substitute ( comment ; ¶ ; "¶# " )	// prefix each line
+];
+	False
+)

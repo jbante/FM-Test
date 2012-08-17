@@ -1,0 +1,39 @@
+/**
+ * =====================================
+ * TestEqual ( actual ; expected ; name )
+ *
+ * PURPOSE:
+ *		Tests for equality of two values and creates a new entry in the test log
+ *		maintained by the Test* functions with more diagnostic information than TestOK.
+ *		The log is formatted according to the Test Anything Protocol (TAP).
+ *
+ * RETURNS:
+ *		The value of testResult, which should be True (1) if the test passes or is "ok",
+ *		or False (0) if the test fails or is "not ok".
+ *
+ * PARAMETERS:
+ *		actual: The result of a procedure being tested.
+ *		expected: The expected result when the tested procedure is behaving correctly.
+ *		name: A name for the test.
+ *
+ * DEPENDENCIES:
+ *		TestDiagnostic
+ *		TestOK
+ *
+ * HISTORY:
+ *		CREATED on 2012-06-28 by Jeremy Bante <http://scr.im/jbante>.
+ *
+ * REFERENCES:
+ *		http://testanything.org/
+ * =====================================
+ */
+
+TestOK ( actual = expected ; name )
+
+// if test passes, TestDiagnostic is bypassed by logic short-circuiting
+or TestDiagnostic (
+	"actual:	"
+	& If ( Position ( actual ; ¶ ; 1 ; 1 ) ; Quote ( actual ) ; /* Else */ actual )
+	& "¶expected:	"
+	& If ( Position ( expected ; ¶ ; 1 ; 1 ) ; Quote ( expected ) ; /* Else */ expected )
+)

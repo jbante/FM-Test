@@ -1,0 +1,54 @@
+/**
+ * =====================================
+ * TestOK ( testResult ; name )
+ *
+ * PURPOSE:
+ *		Creates a new entry in the test log maintained by the Test* functions. The log is
+ *		formatted according to the Test Anything Protocol (TAP).
+ *
+ * RETURNS:
+ *		The value of testResult, which should be True (1) if the test passes or is "ok",
+ *		or False (0) if the test fails or is "not ok".
+ *
+ * PARAMETERS:
+ *		testResult: A boolean indicated whether the test result is pass/ok (True/1) or
+ *		fail/not ok (False/0)
+ *		name: A name for the test
+ *
+ * DEPENDENCIES: none
+ *
+ * VARIABLES:
+ *		$~test.count
+ *		$~test.log[n]
+ *		$~test.skipCount
+ *		$~test.skipReason
+ *		$~test.todoCount
+ *		$~test.todoReason
+ *
+ * NOTES:
+ *		This function will add TODO and SKIP directives when set by the TestToDo or
+ *		TestSkip functions.
+ *
+ * HISTORY:
+ *		CREATED on 2012-06-28 by Jeremy Bante <http://scr.im/jbante>.
+ *
+ * REFERENCES:
+ *		http://testanything.org/
+ * =====================================
+ */
+
+Let ( [
+	~pass = GetAsBoolean ( testResult );
+	$~test.count = $~test.count + 1;
+	$~test.log[$~test.count] =
+		If ( ~pass ; "ok " ; /* Else */ "not ok " )
+		& $~test.count
+		& " "
+		& Substitute ( name ; [ ¶ ; " " ]; [ "#" ; "\\#" ]; [ "\\" ; "\\\\" ] )
+		& If ( $~test.todoCount > 0 ; " # TODO " & $~test.todoReason )
+		& If ( $~test.skipCount > 0 ; " # SKIP " & $~test.skipReason );
+	$~test.todoCount = Max ( $~test.todoCount - 1 ; 0 );
+	$~test.skipCount = Max ( $~test.skipCount - 1 ; 0 )
+];
+	~pass
+)

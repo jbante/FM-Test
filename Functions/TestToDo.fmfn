@@ -1,0 +1,34 @@
+/**
+ * =====================================
+ * TestToDo ( numberOfTests ; reason )
+ *
+ * PURPOSE:
+ *		Adds a TODO directive to the following sequence of tests. The log is formatted
+ *		according to the Test Anything Protocol (TAP).
+ *
+ * RETURNS: "" (Null)
+ *
+ * PARAMETERS:
+ *		numberOfTests: The number of tests to apply the SKIP directive to.
+ *		name: A name for the test
+ *
+ * DEPENDENCIES: none
+ *
+ * VARIABLES:
+ *		$~test.todoCount
+ *		$~test.todoReason
+ *
+ * HISTORY:
+ *		CREATED on 2012-06-28 by Jeremy Bante <http://scr.im/jbante>.
+ *
+ * REFERENCES:
+ *		http://testanything.org/
+ * =====================================
+ */
+
+Let ( [
+	$~test.todoCount = Max ( numberOfTests ; 0 );
+	$~test.todoReason = Substitute ( reason ; ¶ ; " " )
+];
+	""
+)
