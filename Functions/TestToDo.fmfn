@@ -2,6 +2,9 @@
  * =====================================
  * TestToDo ( numberOfTests ; reason )
  *
+ * THIS FUNCTION IS DEPRECATED IN FAVOR OF THE MORE GENERAL TestDirective FUNCTION. THIS
+ * VERSION OF THE FUNCTION EXISTS FOR BACKWARDS COMPATIBILITY ONLY.
+ *
  * PURPOSE:
  *		Adds a TODO directive to the following sequence of tests. The log is formatted
  *		according to the Test Anything Protocol (TAP).
@@ -9,16 +12,14 @@
  * RETURNS: "" (Null)
  *
  * PARAMETERS:
- *		numberOfTests: The number of tests to apply the SKIP directive to.
- *		name: A name for the test
+ *		numberOfTests: The number of tests to apply the TODO directive to.
+ *		reason: The reason a test is marked with TODO.
  *
  * DEPENDENCIES: none
  *
- * VARIABLES:
- *		$~test.todoCount
- *		$~test.todoReason
- *
  * HISTORY:
+ *		MODIFIED on 2012-11-26 by Jeremy Bante <http://scr.im/jbante> to use the
+ *		TestDirective function.
  *		CREATED on 2012-06-28 by Jeremy Bante <http://scr.im/jbante>.
  *
  * REFERENCES:
@@ -26,9 +27,4 @@
  * =====================================
  */
 
-Let ( [
-	$~test.todoCount = Max ( numberOfTests ; 0 );
-	$~test.todoReason = Substitute ( reason ; ¶ ; " " )
-];
-	""
-)
+TestDirective ( numberOfTests ; "SKIP" ; reason )

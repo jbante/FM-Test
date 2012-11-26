@@ -2,6 +2,9 @@
  * =====================================
  * TestSkip ( numberOfTests ; reason )
  *
+ * THIS FUNCTION IS DEPRECATED IN FAVOR OF THE MORE GENERAL TestDirective FUNCTION. THIS
+ * VERSION OF THE FUNCTION EXISTS FOR BACKWARDS COMPATIBILITY ONLY.
+ *
  * PURPOSE:
  *		Adds a SKIP directive to the following sequence of tests. The log is formatted
  *		according to the Test Anything Protocol (TAP).
@@ -10,7 +13,7 @@
  *
  * PARAMETERS:
  *		numberOfTests: The number of tests to apply the SKIP directive to.
- *		name: A name for the test
+ *		reason: The reason a test is marked with SKIP.
  *
  * DEPENDENCIES: none
  *
@@ -19,6 +22,8 @@
  *		$~test.skipReason
  *
  * HISTORY:
+ *		MODIFIED on 2012-11-26 by Jeremy Bante <http://scr.im/jbante> to use the
+ *		TestDirective function.
  *		CREATED on 2012-06-28 by Jeremy Bante <http://scr.im/jbante>.
  *
  * REFERENCES:
@@ -26,9 +31,4 @@
  * =====================================
  */
 
-Let ( [
-	$~test.skipCount = Max ( numberOfTests ; 0 );
-	$~test.skipReason = Substitute ( reason ; ¶ ; " " )
-];
-	""
-)
+TestDirective ( numberOfTests ; "SKIP" ; reason )

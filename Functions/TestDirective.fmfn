@@ -1,0 +1,50 @@
+/**
+ * =====================================
+ * TestDirective ( numberOfTests ; directive ; detail )
+ *
+ * PURPOSE:
+ *		Adds a directive to the following sequence of tests. Directives may clarify how a
+ *		test harness should treat a test or give specific information about the test run.
+ *		The log is formatted according to the Test Anything Protocol (TAP).
+ *
+ * RETURNS: False (0)
+ *
+ * PARAMETERS:
+ *		numberOfTests: The number of tests to apply the directive to.
+ *		directive: The directive to apply to the tests.
+ *		detail: A reason for the directive or specific information about the directive
+ *
+ * EXAMPLE:
+ *		TestDirective ( 1 ; "TODO" ; "This behavior is not implemented yet" )
+ *		or TestOK ( False ; "Some not-yet-implemented behavior" )
+ *
+ * DEPENDENCIES: none
+ *
+ * VARIABLES:
+ *		$~test.directiveCount
+ *		$~test.directive
+ *
+ * HISTORY:
+ *		CREATED on 2012-11-26 by Jeremy Bante <http://scr.im/jbante>.
+ *
+ * REFERENCES:
+ *		http://testanything.org/
+ * =====================================
+ */
+
+Let ( [
+	// clean up directive text
+	directive = Upper ( Substitute ( GetValue ( directive ; 1 ) ; " " ; "" ) );
+	detail =
+		If ( Position ( detail ; ¶ ; 1 ; 1 ) > 0; Quote ( detail ) ; /* Else */ detail );
+
+	// set variables referenced by TestOK function
+	$~test.directiveCount = Max ( numberOfTests ; 0 );
+	$~test.directive =
+		" # "
+		& directive
+		& " "
+		& detail
+];
+	False
+)

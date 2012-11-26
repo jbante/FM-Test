@@ -20,16 +20,16 @@
  * VARIABLES:
  *		$~test.count
  *		$~test.log[n]
- *		$~test.skipCount
- *		$~test.skipReason
- *		$~test.todoCount
- *		$~test.todoReason
+ *		$~test.directiveCount
+ *		$~test.directive
  *
  * NOTES:
- *		This function will add TODO and SKIP directives when set by the TestToDo or
- *		TestSkip functions.
+ *		This function will add any directive set by the TestDirective function. This
+ *		scheme only accommodates one directive at a time.
  *
  * HISTORY:
+ *		MODIFIED on 2012-11-26 by Jeremy Bante <http://scr.im/jbante> to reference the
+ *		general directive* variables instead of the skip* and todo* variables.
  *		CREATED on 2012-06-28 by Jeremy Bante <http://scr.im/jbante>.
  *
  * REFERENCES:
@@ -44,11 +44,9 @@ Let ( [
 		If ( ~pass ; "ok " ; /* Else */ "not ok " )
 		& $~test.count
 		& " "
-		& Substitute ( name ; [ ¶ ; " " ]; [ "#" ; "\\#" ]; [ "\\" ; "\\\\" ] )
-		& If ( $~test.todoCount > 0 ; " # TODO " & $~test.todoReason )
-		& If ( $~test.skipCount > 0 ; " # SKIP " & $~test.skipReason );
-	$~test.todoCount = Max ( $~test.todoCount - 1 ; 0 );
-	$~test.skipCount = Max ( $~test.skipCount - 1 ; 0 )
+		& Substitute ( name ; [ ¶ ; " " ]; [ "\\" ; "\\\\" ]; [ "#" ; "\\#" ] )
+		& If ( $~test.directiveCount > 0 ; $~test.directive );
+	$~test.directiveCount = Max ( $~test.directiveCount - 1 ; 0 )
 ];
 	~pass
 )
