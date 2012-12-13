@@ -1,0 +1,25 @@
+/**
+ * =====================================
+ * TestPassRatioNumerator
+ *
+ * RETURNS:
+ *		The number of tests that have passed for purposes of tallying a pass
+ *		ratio.
+ *
+ * PARAMETERS: none
+ *
+ * DEPENDENCIES: none
+ *
+ * VARIABLES:
+ *		$~test.passRatioNumerator
+ *
+ * NOTES:
+ *		This function serves as a "getter" function since the
+ *		$~test.passRatioNumerator variable is otherwise private.
+ *
+ * HISTORY:
+ *		CREATED on 2012-12-13 by Jeremy Bante <http://scr.im/jbante>.
+ * =====================================
+ */
+
+$~test.passRatioNumerator

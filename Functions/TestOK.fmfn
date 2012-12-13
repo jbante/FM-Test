@@ -3,16 +3,16 @@
  * TestOK ( testResult ; name )
  *
  * PURPOSE:
- *		Creates a new entry in the test log maintained by the Test* functions. The log is
- *		formatted according to the Test Anything Protocol (TAP).
+ *		Creates a new entry in the test log maintained by the Test* functions.
+ 		The log is formatted according to the Test Anything Protocol (TAP).
  *
  * RETURNS:
- *		The value of testResult, which should be True (1) if the test passes or is "ok",
- *		or False (0) if the test fails or is "not ok".
+ *		The value of testResult, which should be True (1) if the test passes or
+ *		is "ok", or False (0) if the test fails or is "not ok".
  *
  * PARAMETERS:
- *		testResult: A boolean indicated whether the test result is pass/ok (True/1) or
- *		fail/not ok (False/0)
+ *		testResult: A boolean indicated whether the test result is pass/ok
+ *		(True/1) or fail/not ok (False/0)
  *		name: A name for the test
  *
  * DEPENDENCIES: none
@@ -22,14 +22,20 @@
  *		$~test.log[n]
  *		$~test.directiveCount
  *		$~test.directive
+ *		$~test.passRatioDenominator
+ *		$~test.passRatioNumerator
  *
  * NOTES:
- *		This function will add any directive set by the TestDirective function. This
- *		scheme only accommodates one directive at a time.
+ *		This function will add any directive set by the TestDirective function.
+ *		This scheme only accommodates one directive at a time.
  *
  * HISTORY:
- *		MODIFIED on 2012-11-26 by Jeremy Bante <http://scr.im/jbante> to reference the
- *		general directive* variables instead of the skip* and todo* variables.
+ *		MODIFIED on 2012-12-13 by Jeremy Bante <http://scr.im/jbante> to
+ *		use the passRatio* variables to keep a running tally of the basic
+ *		pass percentage.
+ *		MODIFIED on 2012-11-26 by Jeremy Bante <http://scr.im/jbante> to
+ *		reference the general directive* variables instead of the skip* and
+ *		todo* variables.
  *		CREATED on 2012-06-28 by Jeremy Bante <http://scr.im/jbante>.
  *
  * REFERENCES:
@@ -38,14 +44,43 @@
  */
 
 Let ( [
-	~pass = GetAsBoolean ( testResult );
-	$~test.count = $~test.count + 1;
+	~pass = GetAsBoolean ( testResult ) ;
+	$~test.count = $~test.count + 1 ;
 	$~test.log[$~test.count] =
 		If ( ~pass ; "ok " ; /* Else */ "not ok " )
 		& $~test.count
 		& " "
 		& Substitute ( name ; [ ¶ ; " " ]; [ "\\" ; "\\\\" ]; [ "#" ; "\\#" ] )
-		& If ( $~test.directiveCount > 0 ; $~test.directive );
+		& If ( $~test.directiveCount > 0 ; $~test.directive ) ;
+	~directive = LeftWords ( $~test.directive ; 1 ) ;
+	$~test.passRatioNumerator =
+		Max ( $~test.passRatioNumerator ; 0 )
+		+ Case (
+			$~test.directiveCount > 0
+			and ~directive = "SKIP"	// don't count "SKIP" directives
+			or not ~pass ;
+				0 ;
+
+			/* Else */
+				1
+		) ;
+	$~test.passRatioDenominator =
+		Max ( $~test.passRatioDenominator ; 0 )
+		+ Case (
+			// don't count "SKIP" directives
+			$~test.directiveCount > 0
+			and ~directive = "SKIP" ;
+				0 ;
+
+			// only count "TODO" tests that pass
+			$~test.directiveCount > 0
+			and ~directive = "TODO"
+			and not ~pass;
+				0 ;
+
+			/* Else */
+				1
+		) ;
 	$~test.directiveCount = Max ( $~test.directiveCount - 1 ; 0 )
 ];
 	~pass
